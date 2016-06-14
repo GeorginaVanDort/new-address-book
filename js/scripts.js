@@ -5,7 +5,8 @@ function Contact(first, last) {
   this.addresses = [];
 }
 
-function Address(street, city, state) {
+function Address(addressType, street, city, state) {
+  this.address = addressType;
   this.street = street;
   this.city = city;
   this.state = state;
@@ -16,7 +17,7 @@ Contact.prototype.fullName = function() {
 }
 
 Address.prototype.fullAddress = function() {
-  return this.street + ", " + this.city + ", " + this.state;
+  return this.address + ", " + this.street + ", " + this.city + ", " + this.state;
 }
 
 function resetFields() {
@@ -29,9 +30,19 @@ function resetFields() {
 
 // user interface logic
 $(document).ready(function() {
-  
+
   $("#add-address").click(function() {
     $("#new-addresses").append('<div class="new-address">' +
+                                '<fieldset class="form-group">' +
+                                  '<label for="addressType">Address</label>' +
+                                  '<select class="form-control" id="addressType">' +
+                                    '<option>Home</option>' +
+                                    '<option>Work</option>' +
+                                    '<option>Business</option>' +
+                                    '<option>School</option>' +
+                                    '<option>Secret Place</option>' +
+                                  '</select>' +
+                                '</fieldset>' +
                                  '<div class="form-group">' +
                                    '<label for="new-street">Street</label>' +
                                    '<input type="text" class="form-control new-street">' +
@@ -55,10 +66,11 @@ $(document).ready(function() {
     var newContact = new Contact(inputtedFirstName, inputtedLastName);
 
     $(".new-address").each(function() {
+      var addressType = $(this).find("input.addressType").val();
       var inputtedStreet = $(this).find("input.new-street").val();
       var inputtedCity = $(this).find("input.new-city").val();
       var inputtedState = $(this).find("input.new-state").val();
-      var newAddress = new Address(inputtedStreet, inputtedCity, inputtedState)
+      var newAddress = new Address(addressType, inputtedStreet, inputtedCity, inputtedState)
       newContact.addresses.push(newAddress)
     });
 
